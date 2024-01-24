@@ -3,6 +3,8 @@ import Navbar from "../components/Navbar";
 import styled from "styled-components";
 import Announcment from "../components/Announcment";
 import Slider from "../components/Slider";
+import Categories from "../components/Categories";
+import Products from "../components/Products";
 
 const HomeContainer = styled.div``;
 
@@ -12,7 +14,8 @@ const Home = () => {
       <Announcment />
       <Navbar />
       <Slider />
-      Home
+      <Categories />
+      <Products />
     </HomeContainer>
   );
 };

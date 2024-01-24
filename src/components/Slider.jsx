@@ -1,6 +1,7 @@
 import { ArrowLeftOutlined, ArrowRightOutlined } from "@mui/icons-material";
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import { sliderItems } from "../data";
 
 const Container = styled.div`
   width: 100%;
@@ -23,18 +24,22 @@ const Arrow = styled.div`
   right: ${(props) => props.direction === "right" && "10px"};
   margin: auto;
   opacity: 0.5;
+  cursor: pointer;
+  z-index: 2;
 `;
 const Wrapper = styled.div`
   height: 100%;
   display: flex;
-  background-color: crimson;
   align-items: center;
+  transition: all 1.5s ease;
+  transform: translate(${(props) => props.slideIndex * -100}vw);
 `;
 const Slide = styled.div`
   height: 100vh;
   min-width: 100vw;
   display: flex;
   align-items: center;
+  background-color: #${(props) => props.background};
 `;
 const ImageContainer = styled.div`
   height: 100%;
@@ -42,6 +47,7 @@ const ImageContainer = styled.div`
 `;
 const Image = styled.img`
   height: 80%;
+  padding: 30px 0 0 40px;
 `;
 const InfoContainer = styled.div`
   padding: 50px;
@@ -64,62 +70,32 @@ const Button = styled.button`
 `;
 
 const Slider = () => {
+  const [slideIndex, setSlideIndex] = useState(0);
+  const handleClick = (direction) => {
+    if (direction === "left") {
+      setSlideIndex(slideIndex > 0 ? slideIndex - 1 : 2);
+    } else setSlideIndex(slideIndex < 2 ? slideIndex + 1 : 0);
+  };
   return (
     <Container>
-      <Arrow direction="left">
+      <Arrow direction="left" onClick={() => handleClick("left")}>
         <ArrowLeftOutlined />
       </Arrow>
-      <Wrapper>
-        <Slide>
-          <ImageContainer>
-            <Image
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbd2C2hAOlqsbe6gqy6LyGQtp6mlDHE9uun-rhMXxcFg&s"
-              alt="Sales"
-            />
-          </ImageContainer>
-          <InfoContainer>
-            <Title>SUMMER SALE</Title>
-            <Description>
-              DON'T COMPROMISE ON STYLE! GET FLAT 30% OFF NOW ON NEW ARRIVALS
-            </Description>
-
-            <Button>SHOP NOW</Button>
-          </InfoContainer>
-        </Slide>
-        <Slide>
-          <ImageContainer>
-            <Image
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbd2C2hAOlqsbe6gqy6LyGQtp6mlDHE9uun-rhMXxcFg&s"
-              alt="Sales"
-            />
-          </ImageContainer>
-          <InfoContainer>
-            <Title>WINTER SALE</Title>
-            <Description>
-              DON'T COMPROMISE ON STYLE! GET FLAT 30% OFF NOW ON NEW ARRIVALS
-            </Description>
-
-            <Button>POPULAR NOW</Button>
-          </InfoContainer>
-        </Slide>
-        <Slide>
-          <ImageContainer>
-            <Image
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbd2C2hAOlqsbe6gqy6LyGQtp6mlDHE9uun-rhMXxcFg&s"
-              alt="Sales"
-            />
-          </ImageContainer>
-          <InfoContainer>
-            <Title>SUMMER SALE</Title>
-            <Description>
-              DON'T COMPROMISE ON STYLE! GET FLAT 30% OFF NOW ON NEW ARRIVALS
-            </Description>
-
-            <Button>SHOP NOW</Button>
-          </InfoContainer>
-        </Slide>
+      <Wrapper slideIndex={slideIndex}>
+        {sliderItems.map((item) => (
+          <Slide background={item.background} key={item.id}>
+            <ImageContainer>
+              <Image src={item.image} alt="Sales" />
+            </ImageContainer>
+            <InfoContainer>
+              <Title>{item.title}</Title>
+              <Description>{item.description} </Description>
+              <Button>SHOP NOW</Button>
+            </InfoContainer>
+          </Slide>
+        ))}
       </Wrapper>
-      <Arrow direction="right">
+      <Arrow direction="right" onClick={() => handleClick("right")}>
         <ArrowRightOutlined />
       </Arrow>
     </Container>
