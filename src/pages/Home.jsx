@@ -5,6 +5,8 @@ import Announcment from "../components/Announcment";
 import Slider from "../components/Slider";
 import Categories from "../components/Categories";
 import Products from "../components/Products";
+import NewsLetter from "../components/NewsLetter";
+import Footer from "../components/Footer";
 
 const HomeContainer = styled.div``;
 
@@ -16,6 +18,8 @@ const Home = () => {
       <Slider />
       <Categories />
       <Products />
+      <NewsLetter />
+      <Footer />
     </HomeContainer>
   );
 };
