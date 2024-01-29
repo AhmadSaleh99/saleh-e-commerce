@@ -25,23 +25,39 @@ const Title = styled.h1`
   font-size: 24px;
   font-weight: 300;
 `;
-const Form = styled.form``;
-const Input = styled.input``;
-const Aggrement = styled.span``;
-const Button = styled.button``;
+const Form = styled.form`
+  display: flex;
+  flex-wrap: wrap;
+`;
+const Input = styled.input`
+  flex: 1;
+  padding: 10px;
+  margin: 20px 10px 0 0;
+`;
+const Aggrement = styled.span`
+  font-size: 12px;
+  margin: 10px 0;
+`;
+const Button = styled.button`
+  background-color: teal;
+  color: white;
+  padding: 15px 25px;
+  border: none;
+  cursor: pointer;
+`;
 
 const Register = () => {
   return (
     <Container>
       <Wrapper>
-        <Title>Create An Account</Title>
+        <Title>CREATE AN ACCOUNT</Title>
         <Form>
           <Input placeholder="name" />
           <Input placeholder="lastname" />
           <Input placeholder="username" />
-          <Input placeholder="email" />
-          <Input placeholder="password" />
-          <Input placeholder="confirmpassword" />
+          <Input type="email" placeholder="email" />
+          <Input type="password" placeholder="password" />
+          <Input type="password" placeholder="confirmpassword" />
           <Aggrement>
             By creating an account, I concent to the processing of my personal
             data in according with <b>PRIVACY POLICY</b>
