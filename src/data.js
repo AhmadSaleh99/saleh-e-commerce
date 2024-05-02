@@ -33,18 +33,21 @@ export const categories = [
     image:
       "https://img.freepik.com/free-photo/young-attractive-woman-shirt-sunglasses_144627-3445.jpg?w=360&t=st=1705728478~exp=1705729078~hmac=c56d1d6dc3f364db57898f03ad417d8440c32414f3c7a7931fc92a3d32facc7e",
     title: "SHIRT STYLE",
+    category: "women",
   },
   {
     id: 2,
     image:
       "https://img.freepik.com/free-photo/beautiful-very-cute-woman_144627-13933.jpg?w=360&t=st=1705728485~exp=1705729085~hmac=296d5338ba82c8dc2c8960230564a3ec99b20c05d76458b1a743aa870a5a7525",
     title: "LONGEWARE LOVE",
+    category: "wn",
   },
   {
     id: 3,
     image:
       "https://img.freepik.com/free-photo/high-fashion-look-glamor-stylish-cute-beautiful-young-blond-woman-model-summer-colorful-hipster-cloth_158538-13386.jpg?w=360&t=st=1705728493~exp=1705729093~hmac=8b9daa51cc236199a0b2f227155cc28d217a3534e7c2ffbfc4d952b0c4baa251",
     title: "LIGHT JACKETS",
+    category: "men",
   },
 ];
 export const popularProducts = [

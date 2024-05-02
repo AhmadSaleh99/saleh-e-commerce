@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Announcment from "../components/Announcment";
 import Footer from "../components/Footer";
 import styled from "styled-components";
 import { Add, Remove } from "@mui/icons-material";
 import { mobile } from "../responsive";
+import { useSelector } from "react-redux";
+import StripeCheckout from "react-stripe-checkout";
+import { userRequest } from "../requestMethods";
+import { useNavigate } from "react-router-dom";
+
+const KEY = process.env.STIPE_PUPLISHABLE_KEY;
 
 const Container = styled.div``;
 const Wrapper = styled.div`
@@ -160,6 +166,28 @@ const Button = styled.button`
 `;
 
 const Cart = () => {
+  const cart = useSelector((state) => state.cart);
+  const [stripeToken, setStripeToken] = useState(null);
+  const navigate = useNavigate();
+
+  const onToken = (token) => {
+    setStripeToken(token);
+  };
+
+  useEffect(() => {
+    const makeRequest = async () => {
+      try {
+        const res = await userRequest.post("/checkout/payment", {
+          tokenId: stripeToken.id,
+          amount: cart.total * 100,
+        });
+        navigate("/success", { data: res.data });
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    stripeToken && makeRequest();
+  }, [stripeToken, cart.total, navigate]);
   return (
     <Container>
       <Navbar />
@@ -178,65 +206,43 @@ const Cart = () => {
 
         <Bottom>
           <Info>
-            <Product>
-              <ProductDetails>
-                <Image src="https://img.freepik.com/free-photo/portrait-beautiful-happy-cute-smiling-brunette-woman-girl-casual-green-hipster-summer-clothes-isolated-white-sunglasses-listening-music-smartphone-with-headphones_158538-12370.jpg?w=360&t=st=1705728468~exp=1705729068~hmac=0fbf122c4a5581e57d3c99a9c9293a86cfbd0ee1dda83099053961bcc2256aeb" />
-                <Details>
-                  <ProductName>
-                    <b>Product:</b> llajfldaj sdldl ljsadl
-                  </ProductName>
-                  <ProductId>
-                    <b>ID:</b> 098023979374
-                  </ProductId>
-                  <ProductColor color="black" />
-                  <ProductSize>
-                    <b>Size:</b> 37.7
-                  </ProductSize>
-                </Details>
-              </ProductDetails>
-              <PriceDetails>
-                <ProductAmountContainer>
-                  <Remove />
-                  <Amount>2</Amount>
-                  <Add />
-                </ProductAmountContainer>
+            {cart.products.map((product) => (
+              <Product>
+                <ProductDetails>
+                  <Image src={product.img} />
+                  <Details>
+                    <ProductName>
+                      <b>Product:</b> {product.title}
+                    </ProductName>
+                    <ProductId>
+                      <b>ID:</b> {product._id}
+                    </ProductId>
+                    <ProductColor color={product.color} />
+                    <ProductSize>
+                      <b>Size:</b> {product.size}
+                    </ProductSize>
+                  </Details>
+                </ProductDetails>
+                <PriceDetails>
+                  <ProductAmountContainer>
+                    <Remove />
+                    <Amount>{product.quantity}</Amount>
+                    <Add />
+                  </ProductAmountContainer>
 
-                <ProductPrice>$ 30</ProductPrice>
-              </PriceDetails>
-            </Product>
+                  <ProductPrice>
+                    $ {product.price * product.quantity}
+                  </ProductPrice>
+                </PriceDetails>
+              </Product>
+            ))}
             <Hr />
-            <Product>
-              <ProductDetails>
-                <Image src="https://img.freepik.com/free-photo/portrait-beautiful-happy-cute-smiling-brunette-woman-girl-casual-green-hipster-summer-clothes-isolated-white-sunglasses-listening-music-smartphone-with-headphones_158538-12370.jpg?w=360&t=st=1705728468~exp=1705729068~hmac=0fbf122c4a5581e57d3c99a9c9293a86cfbd0ee1dda83099053961bcc2256aeb" />
-                <Details>
-                  <ProductName>
-                    <b>Product:</b> llajfldaj sdldl ljsadl
-                  </ProductName>
-                  <ProductId>
-                    <b>ID:</b> 098023979374
-                  </ProductId>
-                  <ProductColor color="black" />
-                  <ProductSize>
-                    <b>Size:</b> 37.7
-                  </ProductSize>
-                </Details>
-              </ProductDetails>
-              <PriceDetails>
-                <ProductAmountContainer>
-                  <Remove />
-                  <Amount>2</Amount>
-                  <Add />
-                </ProductAmountContainer>
-
-                <ProductPrice>$ 30</ProductPrice>
-              </PriceDetails>
-            </Product>
           </Info>
           <Summary>
             <SummaryTitle>ORDER SUMMARY</SummaryTitle>
             <SummaryItem>
               <SummaryItemText>Subtotal</SummaryItemText>
-              <SummaryItemPrice>$ 80</SummaryItemPrice>
+              <SummaryItemPrice>$ {cart.totat}</SummaryItemPrice>
             </SummaryItem>
             <SummaryItem>
               <SummaryItemText>Estimated shipping</SummaryItemText>
@@ -248,9 +254,20 @@ const Cart = () => {
             </SummaryItem>
             <SummaryItem type="total">
               <SummaryItemText>Total</SummaryItemText>
-              <SummaryItemPrice>$ 80</SummaryItemPrice>
+              <SummaryItemPrice>$ {cart.total}</SummaryItemPrice>
             </SummaryItem>
-            <Button>SHECKOUT NOW</Button>
+            <StripeCheckout
+              name="Saleh Shop"
+              image=""
+              billingAddress
+              shippingAddress
+              description={`your total is ${cart.total}`}
+              amount={cart.total * 100}
+              token={onToken}
+              stripeKey={KEY}
+            >
+              <Button>SHECKOUT NOW</Button>
+            </StripeCheckout>
           </Summary>
         </Bottom>
       </Wrapper>
