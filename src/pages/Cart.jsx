@@ -10,7 +10,8 @@ import StripeCheckout from "react-stripe-checkout";
 import { userRequest } from "../requestMethods";
 import { useNavigate } from "react-router-dom";
 
-const KEY = process.env.STIPE_PUPLISHABLE_KEY;
+const KEY =
+  "pk_test_51P7uJg07MEbt7ett8Y6p4SI5R4ZNRJNogDUI2KPw4MAQOlYk4YvSXal8MoDrPSF2M4ctUq4Af17l8Xoq04j4bLNm00THdOTkX2";
 
 const Container = styled.div``;
 const Wrapper = styled.div`
@@ -160,6 +161,7 @@ const SummaryItemPrice = styled.span``;
 const Button = styled.button`
   width: 100%;
   padding: 10px;
+  cursor: pointer;
   background-color: black;
   color: white;
   font-weight: 600;
@@ -170,17 +172,18 @@ const Cart = () => {
   const [stripeToken, setStripeToken] = useState(null);
   const navigate = useNavigate();
 
-  const onToken = (token) => {
-    setStripeToken(token);
-  };
+  // const onToken = (token) => {
+  //   setStripeToken(token);
+  // };
 
   useEffect(() => {
     const makeRequest = async () => {
       try {
         const res = await userRequest.post("/checkout/payment", {
           tokenId: stripeToken.id,
-          amount: cart.total * 100,
+          amount: 500,
         });
+        // console.log(res.data);
         navigate("/success", { data: res.data });
       } catch (e) {
         console.log(e);
@@ -263,7 +266,7 @@ const Cart = () => {
               shippingAddress
               description={`your total is ${cart.total}`}
               amount={cart.total * 100}
-              token={onToken}
+              token={(token) => setStripeToken(token)}
               stripeKey={KEY}
             >
               <Button>SHECKOUT NOW</Button>
